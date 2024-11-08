@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const PORT = 3009;
 
 // Middleware để parse JSON request body
 app.use(express.json());
@@ -15,7 +15,7 @@ app.use(express.json());
 //   // Trả về JSON của request body
 //   res.json(requestBody);
 // });
-app.use((req, res, next) => {
+app.use((req, res, next) => {clear
   if (req.method === 'POST') {
       let body = '';
       req.on('data', chunk => {
