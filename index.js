@@ -15,7 +15,7 @@ app.use(express.json());
 //   // Trả về JSON của request body
 //   res.json(requestBody);
 // });
-app.use((req, res, next) => {clear
+app.use((req, res, next) => {
   if (req.method === 'POST') {
       let body = '';
       req.on('data', chunk => {
