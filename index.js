@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = 3009;
+const PORT = 3006;
 
 // Middleware để parse JSON request body
 app.use(express.json());
