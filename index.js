@@ -9,12 +9,7 @@
 
 
 // Middleware bắt dữ liệu POST
-app.use((req, res, next) => {
-    if (req.method === 'POST') {
-        console.log('Received POST data:', req.body);
-    }
-    next();
-});
+
 
 // // Route mặc định
 // app.get('/', (req, res) => {
@@ -32,6 +27,13 @@ app.use((req, res, next) => {
 const express = require("express");
 const app = express();
 const PORT = 3006;
+
+app.use((req, res, next) => {
+    if (req.method === 'POST') {
+        console.log('Received POST data:', req.body);
+    }
+    next();
+});
 
 // Middleware log dữ liệu POST
 app.use(express.json());
