@@ -209,9 +209,7 @@ app.get("/csrf-form", (req, res) => {
 });
 
 
-  res.setHeader("Content-Type", "text/html");
-  res.send(html);
-});
+  
 
 // Khởi chạy server
 app.listen(PORT, () => {
