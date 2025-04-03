@@ -394,7 +394,3 @@ if __name__ == "__main__":
                 print("goodbye. (took %d tries)" % cnt)
                 exit(0)
             cnt += 1
-Beta
-0 / 0
-used queries
-1
