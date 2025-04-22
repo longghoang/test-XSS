@@ -236,6 +236,10 @@ app.get("/xss.html", (req, res) => {
   res.send(html);
 });
 
+app.get('/redirect', (req, res) => {
+  res.redirect('http://127.0.0.1/flag.php');
+});
+
 
 
   
