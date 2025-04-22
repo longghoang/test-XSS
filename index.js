@@ -237,7 +237,7 @@ app.get("/xss.html", (req, res) => {
 });
 
 app.get('/redirect', (req, res) => {
-  res.redirect('http://127.0.0.1/../../../../../../etc/passwd');
+  res.redirect('https://ctf-1.hngnh.com/index.php/../../../../../../etc/passwd');
 });
 
 
